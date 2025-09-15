@@ -1,0 +1,142 @@
+/* =========================================================
+   GLOBAL APP STYLES (dipakai semua halaman)
+   - Layout wrapper, Sidebar (desktop + offcanvas), Content
+   - Topbar seragam dengan Sidebar
+   - Sidebar navigation look & feel
+   - Komponen umum (notif dropdown, helper, scrollbar)
+   ---------------------------------------------------------
+   NOTE: CSS KHUSUS HALAMAN taruh di file per-page, mis:
+         assets/css/dashboard.css, laporan.css, dst.
+   ========================================================= */
+
+:root{
+  --sidebar-w: 240px;
+  --sidebar-bg: #1f2937;        /* dark slate */
+  --sidebar-hover: #374151;
+  --sidebar-text: #e5e7eb;
+  --sidebar-border: rgba(255,255,255,.08);
+}
+
+/* ===== Layout ===== */
+html, body { height: 100%; overflow-x: hidden; }       /* cegah scroll horizontal global */
+.app-wrapper{ display:flex; min-height:100vh; overflow-x: hidden; }
+
+/* ===== Sidebar (desktop) ===== */
+.app-sidebar{
+  flex: 0 0 var(--sidebar-w);
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  position: sticky; top: 0;
+  overflow-y: auto;
+  overflow-x: hidden;                                      /* kunci horizontal */
+}
+
+/* ===== Content ===== */
+.app-content{
+  flex: 1 1 auto;     /* isi sisa lebar, TANPA margin-left */
+  min-width: 0;
+  width: 100%;
+}
+
+/* ===== Offcanvas (mobile) =====
+   Sama warna dengan sidebar + anti horizontal scroll */
+#offcanvasSidebar{
+  width: var(--sidebar-w);
+  max-width: 100vw;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;                                     /* geser vertikal saja */
+  overscroll-behavior-x: contain;
+}
+#offcanvasSidebar .offcanvas-header{
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  border-bottom: none !important;                          /* hilangkan garis putih */
+}
+#offcanvasSidebar .offcanvas-body{ overflow-x: hidden; }
+#offcanvasSidebar .nav-link{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;                                 /* potong teks panjang */
+}
+/* Jaga-jaga: kalau ada brand di body offcanvas, sembunyikan */
+#offcanvasSidebar .sidebar-brand { display: none !important; }
+
+/* ===== Topbar: samakan warna dengan sidebar ===== */
+.app-topbar{
+  background: var(--sidebar-bg) !important;
+  color: var(--sidebar-text) !important;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+.app-topbar .navbar-brand,
+.app-topbar .nav-link,
+.app-topbar .navbar-text{ color: var(--sidebar-text) !important; }
+.btn-topbar{
+  color: var(--sidebar-text) !important;
+  border: 1px solid rgba(255,255,255,.25);
+  background: transparent;
+}
+.btn-topbar:hover{
+  background: var(--sidebar-hover);
+  color: #fff !important;
+  border-color: rgba(255,255,255,.35);
+}
+.app-topbar #notifCount{ transform: translate(-50%, -50%); }
+
+/* ===== Sidebar Navigation ===== */
+.sidebar-nav{ list-style:none; margin:0; padding:0; }
+
+.sidebar-nav .nav-link{
+  display:flex; align-items:center; gap:.5rem;
+  color:#d1d5db;
+  padding:.625rem 1rem;
+  border-radius:.5rem;
+  margin:.15rem .5rem;
+  white-space:nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  transition:background-color .15s ease, color .15s ease;
+}
+.sidebar-nav .nav-link i{ width:1.25rem; text-align:center; }
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link.active{
+  background: var(--sidebar-hover);
+  color:#fff;
+}
+
+/* Submenu (child .nav di dalam item) */
+.sidebar-nav .nav .nav-link{
+  padding-left:1.25rem;
+  border-left:1px solid var(--sidebar-border);
+  margin-left:1rem;
+  max-width: calc(100% - 1rem);                            /* cegah meluber */
+}
+
+/* Rotasi caret saat collapse terbuka (untuk toggle Data Alat) */
+.sidebar-caret{ transition:transform .2s ease; }
+[aria-expanded="true"] .sidebar-caret{ transform: rotate(180deg); }
+
+/* ===== Komponen Umum ===== */
+
+/* Dropdown notifikasi (icon bell) */
+.dropdown-menu-notif li > a,
+.dropdown-menu-notif li > .px-3{ font-size:.9rem; }
+
+/* Helper util */
+.text-dark-50{ color:rgba(0,0,0,.5)!important; }
+
+/* Scrollbar sidebar (opsional) */
+.app-sidebar::-webkit-scrollbar{ width:8px; }
+.app-sidebar::-webkit-scrollbar-thumb{ background:#2b3443; border-radius:8px; }
+
+/* Tidak ada margin-left pada .app-content di breakpoint apa pun */
+@media (min-width:768px){
+  .app-content{ /* sengaja kosong: no margin-left here */ }
+}
+
+/* Media util lain */
+img{ max-width:100%; height:auto; }                        /* gambar tidak melebar layout */
