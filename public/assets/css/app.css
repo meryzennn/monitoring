@@ -1,27 +1,22 @@
 /* =========================================================
-   GLOBAL APP STYLES (dipakai semua halaman)
-   - Layout wrapper, Sidebar (desktop + offcanvas), Content
-   - Topbar seragam dengan Sidebar
-   - Sidebar navigation look & feel
-   - Komponen umum (notif dropdown, helper, scrollbar)
-   ---------------------------------------------------------
-   NOTE: CSS KHUSUS HALAMAN taruh di file per-page, mis:
-         assets/css/dashboard.css, laporan.css, dst.
+   GLOBAL APP STYLES
    ========================================================= */
-
 :root{
   --sidebar-w: 240px;
   --sidebar-bg: #1f2937;        /* dark slate */
   --sidebar-hover: #374151;
   --sidebar-text: #e5e7eb;
   --sidebar-border: rgba(255,255,255,.08);
+
+  /* Ukuran brand (ubah sesukamu) */
+  --brand-size-desktop: 40px;   /* sidebar (desktop) */
+  --brand-size-mobile: 50px;    /* offcanvas header (mobile) */
 }
 
-/* ===== Layout ===== */
-html, body { height: 100%; overflow-x: hidden; }       /* cegah scroll horizontal global */
+html, body { height: 100%; overflow-x: hidden; }
 .app-wrapper{ display:flex; min-height:100vh; overflow-x: hidden; }
 
-/* ===== Sidebar (desktop) ===== */
+/* ================= Sidebar (desktop) ================= */
 .app-sidebar{
   flex: 0 0 var(--sidebar-w);
   width: var(--sidebar-w);
@@ -29,19 +24,28 @@ html, body { height: 100%; overflow-x: hidden; }       /* cegah scroll horizonta
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   position: sticky; top: 0;
-  overflow-y: auto;
-  overflow-x: hidden;                                      /* kunci horizontal */
+  overflow-y: auto; overflow-x: hidden;
 }
 
-/* ===== Content ===== */
-.app-content{
-  flex: 1 1 auto;     /* isi sisa lebar, TANPA margin-left */
-  min-width: 0;
-  width: 100%;
+/* Brand desktop: logo kiri + teks kanan */
+.app-sidebar .sidebar-brand{ border-bottom:none; }
+.app-sidebar .brand-img{
+  width: var(--brand-size-desktop);
+  height: var(--brand-size-desktop);
+  object-fit: contain;
+  border-radius: 4px;
+}
+.app-sidebar .brand-text{
+  color: var(--sidebar-text);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
-/* ===== Offcanvas (mobile) =====
-   Sama warna dengan sidebar + anti horizontal scroll */
+/* ================= Content ================= */
+.app-content{ flex:1 1 auto; min-width:0; width:100%; }
+
+/* ================= Offcanvas (mobile) ================= */
 #offcanvasSidebar{
   width: var(--sidebar-w);
   max-width: 100vw;
@@ -49,24 +53,33 @@ html, body { height: 100%; overflow-x: hidden; }       /* cegah scroll horizonta
   color: var(--sidebar-text);
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;                                     /* geser vertikal saja */
+  touch-action: pan-y;
   overscroll-behavior-x: contain;
 }
 #offcanvasSidebar .offcanvas-header{
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
-  border-bottom: none !important;                          /* hilangkan garis putih */
+  border-bottom: none !important;
 }
-#offcanvasSidebar .offcanvas-body{ overflow-x: hidden; }
-#offcanvasSidebar .nav-link{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;                                 /* potong teks panjang */
+/* Brand di header offcanvas (logo kecil tapi tidak mini) */
+#offcanvasSidebar .offcanvas-header .brand-img-sm{
+  width: var(--brand-size-mobile) !important;
+  height: var(--brand-size-mobile) !important;
+  object-fit: contain;
+  border-radius: 4px;
 }
-/* Jaga-jaga: kalau ada brand di body offcanvas, sembunyikan */
-#offcanvasSidebar .sidebar-brand { display: none !important; }
+#offcanvasSidebar .offcanvas-header .brand-text{
+  color: var(--sidebar-text);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+/* Jika ada brand di BODY offcanvas (harusnya tidak), sembunyikan agar tak dobel */
+#offcanvasSidebar .offcanvas-body .sidebar-brand{ display:none !important; }
 
-/* ===== Topbar: samakan warna dengan sidebar ===== */
+#offcanvasSidebar .offcanvas-body{ overflow-x: hidden; }
+
+/* ================= Topbar (samakan warna dengan sidebar) ================= */
 .app-topbar{
   background: var(--sidebar-bg) !important;
   color: var(--sidebar-text) !important;
@@ -85,11 +98,10 @@ html, body { height: 100%; overflow-x: hidden; }       /* cegah scroll horizonta
   color: #fff !important;
   border-color: rgba(255,255,255,.35);
 }
-.app-topbar #notifCount{ transform: translate(-50%, -50%); }
+.app-topbar #notifCount{ transform: translate(-50%,-50%); }
 
-/* ===== Sidebar Navigation ===== */
+/* ================= Sidebar Navigation ================= */
 .sidebar-nav{ list-style:none; margin:0; padding:0; }
-
 .sidebar-nav .nav-link{
   display:flex; align-items:center; gap:.5rem;
   color:#d1d5db;
@@ -97,46 +109,68 @@ html, body { height: 100%; overflow-x: hidden; }       /* cegah scroll horizonta
   border-radius:.5rem;
   margin:.15rem .5rem;
   white-space:nowrap;
-  overflow: hidden; text-overflow: ellipsis;
-  transition:background-color .15s ease, color .15s ease;
+  overflow:hidden; text-overflow:ellipsis;
+  transition: background-color .15s ease, color .15s ease;
 }
 .sidebar-nav .nav-link i{ width:1.25rem; text-align:center; }
-
 .sidebar-nav .nav-link:hover,
 .sidebar-nav .nav-link.active{
   background: var(--sidebar-hover);
   color:#fff;
 }
-
-/* Submenu (child .nav di dalam item) */
+/* Submenu */
 .sidebar-nav .nav .nav-link{
   padding-left:1.25rem;
   border-left:1px solid var(--sidebar-border);
   margin-left:1rem;
-  max-width: calc(100% - 1rem);                            /* cegah meluber */
+  max-width: calc(100% - 1rem);
 }
 
-/* Rotasi caret saat collapse terbuka (untuk toggle Data Alat) */
-.sidebar-caret{ transition:transform .2s ease; }
+/* Caret rotate */
+.sidebar-caret{ transition: transform .2s ease; }
 [aria-expanded="true"] .sidebar-caret{ transform: rotate(180deg); }
 
-/* ===== Komponen Umum ===== */
-
-/* Dropdown notifikasi (icon bell) */
+/* ================= Common ================= */
 .dropdown-menu-notif li > a,
 .dropdown-menu-notif li > .px-3{ font-size:.9rem; }
-
-/* Helper util */
 .text-dark-50{ color:rgba(0,0,0,.5)!important; }
-
-/* Scrollbar sidebar (opsional) */
 .app-sidebar::-webkit-scrollbar{ width:8px; }
 .app-sidebar::-webkit-scrollbar-thumb{ background:#2b3443; border-radius:8px; }
 
-/* Tidak ada margin-left pada .app-content di breakpoint apa pun */
 @media (min-width:768px){
-  .app-content{ /* sengaja kosong: no margin-left here */ }
+  .app-content{ /* no margin-left */ }
 }
 
-/* Media util lain */
-img{ max-width:100%; height:auto; }                        /* gambar tidak melebar layout */
+/* ================= Mobile-only animations ================= */
+@media (max-width: 767.98px){
+  :root{
+    --ease-smooth: cubic-bezier(.22,.61,.36,1);
+    --offcanvas-dur: 280ms;
+  }
+  #offcanvasSidebar{
+    --bs-offcanvas-transition: transform var(--offcanvas-dur) var(--ease-smooth);
+    will-change: transform;
+  }
+  .offcanvas-backdrop.fade{ opacity:0; }
+  .offcanvas-backdrop.show{
+    opacity:.35;
+    transition: opacity var(--offcanvas-dur) var(--ease-smooth);
+    backdrop-filter: blur(1px);
+  }
+  @keyframes oc-fade-slide-in{
+    from{ opacity:0; transform:translateX(-8px); }
+    to{   opacity:1; transform:none; }
+  }
+  #offcanvasSidebar .oc-item-animate{
+    animation: oc-fade-slide-in var(--offcanvas-dur) var(--ease-smooth) both;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  #offcanvasSidebar,
+  .offcanvas-backdrop{ transition:none!important; animation:none!important; }
+}
+
+/* Utility */
+img{ max-width:100%; height:auto; }

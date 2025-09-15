@@ -1,4 +1,5 @@
 <?php helper('url'); ?>
+<?php $brandLogo = base_url('assets/img/logo-kementerian.svg'); ?>
 <!doctype html>
 <html lang="id">
 <head>
@@ -13,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- Global CSS -->
-  <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>?v=1.2.3">
 
   <!-- Page-level CSS -->
   <?= $this->renderSection('styles') ?>
@@ -23,31 +24,35 @@
 <div class="app-wrapper d-flex">
   <!-- Sidebar desktop -->
   <aside class="app-sidebar d-none d-md-flex flex-column">
-    <?= $this->include('partials/sidebar', ['renderHeader' => true]) ?>
+    <?= $this->include('partials/sidebar', [
+      'showBrand'  => true,
+      'activeMenu' => $activeMenu ?? '',
+      'brandLogo'  => $brandLogo
+    ]) ?>
   </aside>
 
-  <!-- Offcanvas mobile -->
-<div class="offcanvas offcanvas-start shadow" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
-  <!-- HAPUS border-bottom biar ga ada garis putih -->
-  <div class="offcanvas-header py-3">
-    <div class="d-flex align-items-center gap-2">
-      <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" height="24" class="rounded">
-      <strong id="offcanvasSidebarLabel" class="text-white">BRBIH</strong>
+  <!-- Offcanvas mobile (hanya muncul di < md) -->
+  <div class="offcanvas offcanvas-start shadow d-md-none" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+    <div class="offcanvas-header py-3">
+      <div class="d-flex align-items-center gap-2">
+        <img src="<?= $brandLogo ?>" class="brand-img-sm" alt="Logo">
+        <strong id="offcanvasSidebarLabel" class="brand-text">BRBIH</strong>
+      </div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
     </div>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
+    <div class="offcanvas-body p-0">
+      <!-- Penting: brand di body dimatikan supaya tidak dobel -->
+      <?= $this->include('partials/sidebar', [
+        'showBrand'  => false,
+        'activeMenu' => $activeMenu ?? '',
+        'brandLogo'  => $brandLogo
+      ]) ?>
+    </div>
   </div>
-  <div class="offcanvas-body p-0">
-    <!-- PENTING: jangan render brand di body offcanvas -->
-    <?= $this->include('partials/sidebar', ['showBrand' => false]) ?>
-  </div>
-</div>
-
-<!-- Sidebar desktop -->
-
 
   <!-- Main content -->
   <main class="app-content flex-grow-1 min-vh-100">
-    <?= $this->include('partials/topbar') ?>
+    <?= $this->include('partials/topbar', ['title' => $title ?? 'Dashboard']) ?>
 
     <div class="container-fluid py-3">
       <?= $this->renderSection('content') ?>
@@ -59,7 +64,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Global JS -->
-<script src="<?= base_url('assets/js/app.js') ?>"></script>
+<script src="<?= base_url('assets/js/app.js') ?>?v=1.2.3"></script>
 
 <!-- Page-level JS -->
 <?= $this->renderSection('scripts') ?>
