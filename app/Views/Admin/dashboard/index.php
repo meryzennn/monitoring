@@ -104,5 +104,5 @@
 <!-- JS khusus halaman: MUAT Chart.js DULU baru dashboard.js -->
 <?= $this->section('scripts') ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="<?= base_url('assets/js/dashboard.js') ?>?v=1.0.0"></script>
+<script src="<?= base_url('assets/js-admin/dashboard.js') ?>?v=1.0.0"></script>
 <?= $this->endSection() ?>

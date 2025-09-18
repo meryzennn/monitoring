@@ -6,7 +6,9 @@
     </button>
 
     <!-- Judul halaman -->
-    <span class="navbar-brand ms-2"><?= esc($title ?? 'Dashboard') ?></span>
+    <span class="navbar-brand ms-2"><?= esc($title ?? '') ?></span>
+
+   
 
     <!-- Aksi kanan -->
     <div class="d-flex align-items-center gap-2">

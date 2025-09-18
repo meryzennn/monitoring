@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Models\LaporanModel;
 use App\Models\AlatModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Controllers\BaseController;
 
 class Dashboard extends BaseController
 {
@@ -32,7 +33,7 @@ class Dashboard extends BaseController
             'latest'          => $lap->latest(5),
         ];
 
-        return view('dashboard/index', $data);
+        return view('Admin/dashboard/index', $data);
     }
 
 

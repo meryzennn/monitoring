@@ -25,7 +25,7 @@ $brandLogo = $brandLogo ?? base_url('assets/img/logo-kementerian.svg'); // fallb
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="<?= base_url('data-kendala') ?>">
+    <a class="nav-link <?= $active==='data-kendala'?'active':'' ?>" href="<?= base_url('data_kendala') ?>">
         <i class="bi bi-exclamation-triangle me-2"></i>Data Kendala
       </a>
     </li>
