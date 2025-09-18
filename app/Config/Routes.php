@@ -6,6 +6,8 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Admin\Dashboard::index');
 $routes->get('dashboard', 'Admin\Dashboard::index');
 $routes->get('data_kendala', 'Admin\Data_kendala::data_kendala');
+$routes->get('admin/qr', 'Admin\Qr::index');
+
 
 // Data chart dashboard (JSON)
 $routes->get('dashboard/chart-data', 'Dashboard::chartData');

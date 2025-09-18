@@ -30,6 +30,13 @@ $brandLogo = $brandLogo ?? base_url('assets/img/logo-kementerian.svg'); // fallb
       </a>
     </li>
 
+
+    <li class="nav-item">
+    <a class="nav-link <?= $active==='qr'?'active':'' ?>" href="<?= base_url('admin/qr') ?>">
+      <i class="bi bi-qr-code me-2"></i>Generate QR
+    </a>
+  </li>
+
     <li class="nav-item">
       <button class="nav-link d-flex justify-content-between align-items-center w-100 text-start"
               data-bs-toggle="collapse" data-bs-target="#menuAlat" aria-expanded="false" aria-controls="menuAlat">
@@ -44,6 +51,8 @@ $brandLogo = $brandLogo ?? base_url('assets/img/logo-kementerian.svg'); // fallb
       </div>
     </li>
 
+
+    
     <li class="nav-item">
       <a class="nav-link" href="<?= base_url('laporan') ?>"><i class="bi bi-file-earmark-text me-2"></i>Laporan</a>
     </li>

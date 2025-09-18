@@ -1,0 +1,20 @@
+.device-card { background: var(--bs-body-bg); border-radius: 12px; }
+.qr-wrap { min-height: 280px; display:flex; align-items:center; justify-content:center; }
+#printArea { border: 1px dashed rgba(0,0,0,.2); padding: 12px; border-radius: 10px; }
+
+/* saat cetak, tampilkan hanya label */
+@media print {
+  body * { visibility: hidden; }
+  #printArea, #printArea * { visibility: visible; }
+  #printArea { position: absolute; inset: 0; margin: 8mm; }
+}
+.device-card { background: var(--bs-body-bg); border-radius: 12px; }
+.qr-wrap { min-height: 280px; display:flex; align-items:center; justify-content:center; }
+#printArea { border: 1px dashed rgba(0,0,0,.2); padding: 12px; border-radius: 10px; }
+
+/* saat cetak, tampilkan hanya label */
+@media print {
+  body * { visibility: hidden; }
+  #printArea, #printArea * { visibility: visible; }
+  #printArea { position: absolute; inset: 0; margin: 8mm; }
+}
