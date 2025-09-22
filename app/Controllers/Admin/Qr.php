@@ -8,7 +8,7 @@ class Qr extends BaseController
     public function index()
     {
         return view('Admin/qr/index', [
-            'title'  => 'Generate QR Perangkat',
+            'title'  => 'Generate QR',
             'activeMenu' => 'qr',
         ]);
     }

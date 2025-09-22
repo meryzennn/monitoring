@@ -6,6 +6,9 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
+
+
+
 <div class="row g-3">
   <!-- Total Alat -->
   <div class="col-12 col-lg-3">
@@ -20,6 +23,7 @@
       </div>
     </div>
   </div>
+
   <!-- Pending Verifikasi -->
   <div class="col-12 col-lg-3">
     <div class="card shadow-sm card-stat bg-success">
@@ -33,6 +37,7 @@
       </div>
     </div>
   </div>
+
   <!-- Perlu Perbaikan -->
   <div class="col-12 col-lg-3">
     <div class="card shadow-sm card-stat bg-warning">
@@ -46,6 +51,7 @@
       </div>
     </div>
   </div>
+
   <!-- Selesai Bulan Ini -->
   <div class="col-12 col-lg-3">
     <div class="card shadow-sm card-stat bg-danger">
@@ -99,10 +105,17 @@
     </div>
   </div>
 </div>
+
 <?= $this->endSection() ?>
 
 <!-- JS khusus halaman: MUAT Chart.js DULU baru dashboard.js -->
 <?= $this->section('scripts') ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  // tombol refresh (opsional)
+  document.getElementById('refreshDash')?.addEventListener('click', () => {
+    location.reload();
+  });
+</script>
 <script src="<?= base_url('assets/js-admin/dashboard.js') ?>?v=1.0.0"></script>
 <?= $this->endSection() ?>
