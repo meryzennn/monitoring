@@ -1,9 +1,6 @@
 <?= $this->extend('layouts/admin_layout') ?>
 <?= $this->section('content') ?>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 mb-0">Generate QR Perangkat</h1>
-</div>
 
 <div class="row g-3">
   <!-- FORM -->
@@ -15,7 +12,7 @@
         <form id="formQR" class="row g-3 needs-validation" novalidate>
           <?= csrf_field() ?>
 
-          <!-- Status awal fix "normal" (tanpa pilihan) -->
+          <!-- Status awal fix "normal" -->
           <input type="hidden" name="status" value="normal">
 
           <div class="col-12">
@@ -50,14 +47,14 @@
               <div id="dzEmpty" class="dz-empty">
                 <i class="bi bi-image fs-2 d-block mb-2"></i>
                 <div class="mb-2">Seret foto ke sini atau</div>
-                <button class="btn btn-outline-secondary btn-sm" id="btnPick">Pilih Foto</button>
+                <button class="btn btn-outline-secondary btn-sm" id="btnPick" type="button">Pilih Foto</button>
                 <div class="form-text mt-2">Disarankan foto tampak depan + stiker serial. Maks ~2MB (akan dikompres).</div>
               </div>
               <div id="dzPreviewBox" class="dz-preview d-none">
                 <img id="dzPreview" class="img-fluid rounded border" alt="Foto AC">
                 <div class="d-flex gap-2 justify-content-center mt-2">
-                  <button class="btn btn-outline-secondary btn-sm" id="btnGanti">Ganti</button>
-                  <button class="btn btn-outline-danger btn-sm" id="btnHapus">Hapus</button>
+                  <button class="btn btn-outline-secondary btn-sm" id="btnGanti" type="button">Ganti</button>
+                  <button class="btn btn-outline-danger btn-sm" id="btnHapus" type="button">Hapus</button>
                 </div>
               </div>
             </div>
@@ -69,13 +66,13 @@
           </div>
 
           <div class="col-12">
-            <div class="form-text">URL publik: <code>/ac/{TOKEN}</code></div>
+            <div class="form-text">Polanya: <code>/ac/{TOKEN}</code></div>
           </div>
 
           <div class="col-12">
             <label class="form-label">Base URL publik</label>
             <input name="base" id="baseUrl" class="form-control" value="<?= rtrim(site_url(), '/') ?>">
-            <div class="form-text">Default mengikuti <code>site_url()</code>.</div>
+            <div class="form-text">Default mengikuti <code>site_url()</code>. Ubah jika domain/subfolder berbeda.</div>
           </div>
 
           <div class="col-12 d-grid d-sm-flex gap-2 mt-2">
@@ -132,9 +129,9 @@
             </div>
             <div class="d-grid d-sm-flex gap-2 mt-3">
               <a id="btnOpen" href="#" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-box-arrow-up-right"></i> Buka URL</a>
-              <button id="btnDownload" class="btn btn-outline-success btn-sm"><i class="bi bi-download"></i> Download PNG</button>
-              <button id="btnPrint" class="btn btn-outline-secondary btn-sm"><i class="bi bi-printer"></i> Cetak Label</button>
-              <button id="btnJson" class="btn btn-outline-dark btn-sm"><i class="bi bi-filetype-json"></i> Simpan JSON</button>
+              <button id="btnDownload" class="btn btn-outline-success btn-sm" type="button"><i class="bi bi-download"></i> Download PNG</button>
+              <button id="btnPrint" class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-printer"></i> Cetak Label</button>
+              <button id="btnJson" class="btn btn-outline-dark btn-sm" type="button"><i class="bi bi-filetype-json"></i> Simpan JSON</button>
             </div>
           </div>
         </div>
@@ -147,8 +144,9 @@
               <div class="fw-semibold" id="prNama">—</div>
               <div class="small" id="prLokasi">—</div>
               <div class="small text-muted">Kode: <code id="prKode">—</code></div>
-              <div class="small text-muted d-flex align-items-center gap-1">
-                <i class="bi bi-link-45deg"></i><span id="prUrl">—</span>
+              <div class="small text-muted d-flex align-items-center gap-1 url-line">
+                <i class="bi bi-link-45deg"></i>
+                <span id="prUrl" class="text-break">—</span>
               </div>
               <!-- Foto pada label cetak -->
               <div id="prPhotoBox" class="mt-2 d-none">
@@ -173,5 +171,7 @@
 
 <?= $this->section('scripts') ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?= base_url('assets/js-admin/qr-generator.js') ?>"></script>
 <?= $this->endSection() ?>
+

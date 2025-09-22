@@ -78,7 +78,8 @@
 
 <?= $this->section('actionbar') ?>
 <a href="#" id="btnPerbaikan" class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2">
-  <i class="bi bi-tools"></i><span>Buat Laporan Perbaikan</span>
+  <i class="bi bi-tools"></i><
+  >Buat Laporan Perbaikan</span>
 </a>
 <?= $this->endSection() ?>
 
