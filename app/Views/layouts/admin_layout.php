@@ -32,8 +32,6 @@
   <div class="offcanvas offcanvas-start shadow d-md-none" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
     <div class="offcanvas-header py-3">
       <div class="d-flex align-items-center gap-2">
-        <img src="<?= $brandLogo ?>" class="brand-img-sm" alt="Logo">
-        <strong id="offcanvasSidebarLabel" class="brand-text"><?= $brandText ?></strong>
       </div>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
     </div>

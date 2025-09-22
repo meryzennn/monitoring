@@ -1,17 +1,26 @@
+<?php
+$brandLogo = $brandLogo ?? base_url('assets/img/logo-kementerian.svg'); // fallback
+?>
 <nav class="navbar app-topbar sticky-top">
-  <div class="container-fluid">
-    <!-- Toggler mobile -->
-    <button class="btn btn-topbar d-md-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
-      <i class="bi bi-list"></i>
-    </button>
+  <div class="container-fluid topbar-container position-relative">
 
-    <!-- Judul halaman -->
-    <span class="navbar-brand ms-2"><?= esc($title ?? '') ?></span>
+    <!-- Kiri: toggler + brand -->
+    <div class="topbar-left d-flex align-items-center gap-2">
+      <button class="btn btn-topbar d-lg-none me-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+        <i class="bi bi-list"></i>
+      </button>
 
-   
+      <img src="<?= $brandLogo ?>" alt="Logo Kementerian" class="brand-img-topbar">
+      <strong class="brand-text-topbar">BRBIH</strong>
+    </div>
 
-    <!-- Aksi kanan -->
-    <div class="d-flex align-items-center gap-2">
+    <!-- Tengah: judul halaman (benar-benar center) -->
+    <div class="topbar-center position-absolute top-50 start-50 translate-middle">
+      <span class="page-title-center text-truncate"><?= esc($title ?? '') ?></span>
+    </div>
+
+    <!-- Kanan: aksi -->
+    <div class="topbar-right d-flex align-items-center gap-2 ms-auto">
       <div class="dropdown">
         <button class="btn btn-topbar position-relative" data-bs-toggle="dropdown" aria-expanded="false" id="notifBell">
           <i class="bi bi-bell fs-5"></i>
@@ -24,5 +33,6 @@
         </ul>
       </div>
     </div>
+
   </div>
 </nav>
