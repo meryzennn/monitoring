@@ -28,7 +28,13 @@ html, body{ height:100%; margin:0; overflow:hidden; background:#0f172a0a; }
   border-bottom:1px solid var(--sidebar-border);
   padding-block:2px;
 }
-.navbar.app-topbar .container-fluid{ min-height:var(--topbar-h); padding-inline:.75rem; }
+.navbar.app-topbar .container-fluid{
+  min-height: var(--topbar-h);
+  padding-inline: .75rem;
+  display: flex;                 /* baru */
+  align-items: center;           /* baru: lurusin konten vertikal */
+  position: relative;            /* agar absolute child (judul) nempel ke sini */
+}
 
 /* Brand kiri */
 .app-topbar .brand-img-topbar{ height:32px; width:auto; object-fit:contain; }
@@ -36,12 +42,26 @@ html, body{ height:100%; margin:0; overflow:hidden; background:#0f172a0a; }
 .app-topbar .brand-text-topbar{ font-weight:700; letter-spacing:.3px; color:var(--sidebar-text); line-height:1; }
 
 /* Judul center absolut (tidak terpengaruh kiri/kanan) */
-.topbar-container{ position:relative; min-height:var(--topbar-h); }
-.topbar-center{ position:absolute; inset:auto 50% auto auto; transform:translateX(50%); top:50%; translate:0 -50%; pointer-events:none; }
-.page-title-center{
-  pointer-events:auto; color:var(--sidebar-text); font-weight:600; font-size:.98rem;
-  max-width:60vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+/* container pembungkus judul */
+.topbar-container{ position: relative; min-height: var(--topbar-h); }
+
+/* Pusatkan judul bener-bener di tengah bar */
+.topbar-center{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);  /* tidak pakai properti CSS 'translate:' */
+  pointer-events: none;               /* biar klik kanan-kiri tetap bisa */
 }
+
+.page-title-center{
+  pointer-events: auto;
+  color: var(--sidebar-text);
+  font-weight: 600;
+  font-size: 1rem;     /* boleh naikkan/dturunkan sesuai selera */
+  line-height: 1;      /* rapat, biar sejajar logo */
+}
+
 
 /* Tombol topbar */
 .btn-topbar{
@@ -118,9 +138,19 @@ html, body{ height:100%; margin:0; overflow:hidden; background:#0f172a0a; }
 #offcanvasSidebar .brand-text, #offcanvasSidebar .offcanvas-title{ display:none!important; }
 
 /* Stagger item saat open */
-#offcanvasSidebar .sidebar-nav > .nav > .nav-item{ opacity:0; transform:translateX(-8px); }
-#offcanvasSidebar.is-open .sidebar-nav > .nav > .nav-item{ animation:ocItemIn 320ms var(--ease-smooth) both; }
-@keyframes ocItemIn{ from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
+#offcanvasSidebar .sidebar-nav > .nav > .nav-item{
+  opacity: 0;
+  transform: translateX(-8px);
+}
+/* Bootstrap pakai .show saat offcanvas terbuka */
+#offcanvasSidebar.show .sidebar-nav > .nav > .nav-item{
+  animation: ocItemIn 320ms var(--ease-smooth) both;
+}
+@keyframes ocItemIn{
+  from { opacity:0; transform:translateX(-8px); }
+  to   { opacity:1; transform:none; }
+}
+
 
 /* =========================================================
    RESPONSIVE

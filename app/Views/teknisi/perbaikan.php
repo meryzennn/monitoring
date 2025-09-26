@@ -24,11 +24,11 @@
 
 <!-- Form Perbaikan -->
 <form id="formPerbaikan" class="card shadow-sm needs-validation" novalidate>
+  <?= csrf_field() ?>
   <div class="card-header bg-body fw-semibold border-0 px-3 px-sm-4 pt-3">
     <i class="bi bi-clipboard2-check me-1"></i> Laporan Perbaikan
   </div>
 
-  <!-- tambah padding kiri-kanan yang konsisten -->
   <div class="card-body px-3 px-sm-4 pb-3">
     <div class="mb-3">
       <label class="form-label mb-2">Tindakan perbaikan</label>
@@ -37,7 +37,6 @@
       <div class="invalid-feedback">Wajib diisi.</div>
     </div>
 
-    <!-- kolom responsif; full-width di mobile, 50/50 di ≥md -->
     <div class="row g-3">
       <div class="col-12 col-md-6">
         <label class="form-label mb-2">Part (opsional)</label>
@@ -45,13 +44,13 @@
       </div>
       <div class="col-12 col-md-6">
         <label class="form-label mb-2">Biaya (opsional)</label>
-        <input type="number" name="biaya" class="form-control" placeholder="0">
+        <input type="number" name="biaya" class="form-control" placeholder="0" min="0" step="1">
       </div>
     </div>
 
     <div class="mt-3">
       <label class="form-label mb-2">Foto setelah perbaikan (opsional)</label>
-      <input type="file" accept="image/*" capture="environment" id="fotoAfter" class="form-control">
+      <input type="file" accept="image/*" capture="environment" id="fotoAfter" name="fotoAfter" class="form-control">
       <div id="afterPreviewBox" class="mt-2 d-none">
         <img id="afterPreview" class="img-fluid rounded border" alt="Foto sesudah">
       </div>
@@ -65,7 +64,6 @@
     <a id="btnBackDetail" href="#" class="btn btn-outline-secondary">Kembali ke Detail</a>
   </div>
 </form>
-
 
 <!-- Alert sukses -->
 <div id="alertDone" class="alert alert-success mt-3 d-none">

@@ -1,7 +1,6 @@
 <?= $this->extend('layouts/admin_layout') ?>
 <?= $this->section('content') ?>
 
-
 <div class="row g-3">
   <!-- FORM -->
   <div class="col-12 col-lg-5">
@@ -9,10 +8,9 @@
       <div class="card-body">
         <h2 class="h6 mb-3">Detail Perangkat</h2>
 
-        <form id="formQR" class="row g-3 needs-validation" novalidate>
+        <form id="formQR" class="row g-3 needs-validation" novalidate
+              data-save-url="<?= site_url('admin/qr/save') ?>">
           <?= csrf_field() ?>
-
-          <!-- Status awal fix "normal" -->
           <input type="hidden" name="status" value="normal">
 
           <div class="col-12">
@@ -43,12 +41,12 @@
           <div class="col-12">
             <label class="form-label">Foto AC (opsional)</label>
             <div id="dzFoto" class="dropzone rounded-3 p-3 text-center">
-              <input type="file" accept="image/*" id="fotoAc" class="d-none">
+              <input type="file" accept="image/*" id="fotoAc" name="foto" class="d-none">
               <div id="dzEmpty" class="dz-empty">
                 <i class="bi bi-image fs-2 d-block mb-2"></i>
                 <div class="mb-2">Seret foto ke sini atau</div>
                 <button class="btn btn-outline-secondary btn-sm" id="btnPick" type="button">Pilih Foto</button>
-                <div class="form-text mt-2">Disarankan foto tampak depan + stiker serial. Maks ~2MB (akan dikompres).</div>
+                <div class="form-text mt-2">Disarankan foto tampak depan + stiker serial. Akan dikompres.</div>
               </div>
               <div id="dzPreviewBox" class="dz-preview d-none">
                 <img id="dzPreview" class="img-fluid rounded border" alt="Foto AC">
@@ -72,7 +70,7 @@
           <div class="col-12">
             <label class="form-label">Base URL publik</label>
             <input name="base" id="baseUrl" class="form-control" value="<?= rtrim(site_url(), '/') ?>">
-            <div class="form-text">Default mengikuti <code>site_url()</code>. Ubah jika domain/subfolder berbeda.</div>
+            <div class="form-text">Ubah jika domain/subfolder berbeda.</div>
           </div>
 
           <div class="col-12 d-grid d-sm-flex gap-2 mt-2">
@@ -148,7 +146,6 @@
                 <i class="bi bi-link-45deg"></i>
                 <span id="prUrl" class="text-break">—</span>
               </div>
-              <!-- Foto pada label cetak -->
               <div id="prPhotoBox" class="mt-2 d-none">
                 <img id="prImg" class="print-photo rounded border" alt="Foto AC">
               </div>
@@ -174,4 +171,3 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?= base_url('assets/js-admin/qr-generator.js') ?>"></script>
 <?= $this->endSection() ?>
-

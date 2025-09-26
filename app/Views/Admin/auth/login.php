@@ -6,7 +6,8 @@
   <title>Login</title>
 
   <!-- (opsional) font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <!-- CSS eksternal -->
@@ -22,19 +23,44 @@
       <img class="auth-logo" src="<?= base_url('assets/img/logo-kementerian.svg') ?>" alt="Logo">
       <h2 class="auth-title">Selamat Datang di Website<br>Monitoring Alat</h2>
 
-      <form method="post" action="<?= base_url('auth/do') ?>">
-        <!-- <?= function_exists('csrf_field') ? csrf_field() : '' ?> -->
+      <?php if ($msg = session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= esc($msg) ?></div>
+      <?php endif; ?>
+      <?php if ($msg = session()->getFlashdata('success')): ?>
+        <div class="alert alert-success"><?= esc($msg) ?></div>
+      <?php endif; ?>
+
+      <form method="post" action="<?= base_url('auth/do') ?>" autocomplete="on" novalidate>
+        <?= csrf_field() ?>
+
         <div class="mb-3">
           <label for="username">Username</label>
-          <input class="form-control" type="text" id="username" name="username" placeholder="username" required autofocus>
+          <input
+            class="form-control"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="username"
+            value="<?= old('username') ?>"
+            autocomplete="username"
+            required autofocus>
         </div>
+
         <div class="mb-4">
           <label for="password">Password</label>
           <div class="input-groupish">
-            <input class="form-control" type="password" id="password" name="password" placeholder="Your password" required>
+            <input
+              class="form-control"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Your password"
+              autocomplete="current-password"
+              required>
             <span id="togglePwd" class="password-toggle" title="Show/Hide">👁</span>
           </div>
         </div>
+
         <button type="submit" class="btn">Masuk</button>
       </form>
     </div>
@@ -42,5 +68,6 @@
 
   <!-- JS eksternal -->
   <script src="<?= base_url('assets/js-admin/auth.js') ?>?v=1.0.0" defer></script>
+  <?= $this->include('partials/swal_flash') ?>
 </body>
 </html>

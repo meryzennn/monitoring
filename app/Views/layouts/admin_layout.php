@@ -24,22 +24,20 @@
     <?= $this->include('partials/sidebar', [
       'showBrand'  => false,
       'activeMenu' => $activeMenu ?? '',
-      'brandLogo'  => $brandLogo
+      'brandLogo'  => $brandLogo,
+      'collapseSuffix' => 'desktop',
+      
     ]) ?>
   </aside>
 
   <!-- Offcanvas mobile -->
   <div class="offcanvas offcanvas-start shadow d-md-none" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
-    <div class="offcanvas-header py-3">
-      <div class="d-flex align-items-center gap-2">
-      </div>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
-    </div>
     <div class="offcanvas-body p-0">
       <?= $this->include('partials/sidebar', [
         'showBrand'  => false,
         'activeMenu' => $activeMenu ?? '',
-        'brandLogo'  => $brandLogo
+        'brandLogo'  => $brandLogo,
+        'collapseSuffix' => 'mobile',
       ]) ?>
     </div>
   </div>
@@ -64,5 +62,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('assets/js/app.js') ?>?v=1.3.0"></script>
 <?= $this->renderSection('scripts') ?>
+
+<!-- 👇 SweetAlert flash (muncul sekali berdasarkan flashdata) -->
+<?= $this->include('partials/swal_flash') ?>
+
 </body>
 </html>

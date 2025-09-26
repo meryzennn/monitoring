@@ -1,4 +1,4 @@
-// ================= qr-generator.js (simple) =================
+// =============== qr-generator.js ===============
 
 // Utils
 function randomHex(bytes=16){
@@ -13,7 +13,7 @@ function sanitizeKode(k){ return (k||'').toString().trim().toUpperCase(); }
 function makeURL(base, token){ const clean=(base||'').replace(/\/+$/,''); return `${clean}/ac/${token}`; }
 function shortDisplay(url){ try{ const u=new URL(url); return (u.host+u.pathname).replace(/\/+$/,''); }catch{ return url; } }
 
-// Image helpers (optional foto AC)
+// Image helpers
 function fileToDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 function compressDataURL(dataUrl, maxW=1200, maxH=1200, quality=0.85){
   return new Promise((res)=>{
@@ -27,6 +27,13 @@ function compressDataURL(dataUrl, maxW=1200, maxH=1200, quality=0.85){
     }; img.src=dataUrl;
   });
 }
+function dataUrlToBlob(dataUrl){
+  const [meta, b64] = dataUrl.split(',');
+  const mime = (meta.match(/data:(.*?);/)||[])[1] || 'image/jpeg';
+  const bin = atob(b64); const len = bin.length;
+  const u8 = new Uint8Array(len); for (let i=0;i<len;i++) u8[i]=bin.charCodeAt(i);
+  return new Blob([u8], {type: mime});
+}
 
 function renderQR(targetId, text, size=256){
   const box=document.getElementById(targetId); if(!box) return;
@@ -34,7 +41,7 @@ function renderQR(targetId, text, size=256){
   new QRCode(box,{text,width:size,height:size,correctLevel:QRCode.CorrectLevel.M});
 }
 
-// ================= main =================
+// =============== main ===============
 document.addEventListener('DOMContentLoaded', ()=>{
   const baseInput = document.getElementById('baseUrl');
   if(!baseInput.value) baseInput.value = location.origin;
@@ -42,8 +49,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const form     = document.getElementById('formQR');
   const alertBox = document.getElementById('alertBox');
   const btnOpen  = document.getElementById('btnOpen');
+  const saveUrl  = form?.dataset?.saveUrl || null;
 
-  // Foto widgets (opsional)
+  // Foto widgets
   const dz          = document.getElementById('dzFoto');
   const fileInput   = document.getElementById('fotoAc');
   const btnPick     = document.getElementById('btnPick');
@@ -60,25 +68,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   let photoDataUrl = null;
 
-  // Foto handlers (simple)
+  // Foto handlers
   function applyPhoto(dataUrl){
     photoDataUrl = dataUrl || null;
 
-    // Dropzone preview
     if (photoDataUrl){
       dzPreview.src = photoDataUrl;
       dzEmpty.classList.add('d-none');
       dzPreviewBox.classList.remove('d-none');
+      pvImg.src = photoDataUrl; pvPhotoBox.classList.remove('d-none');
+      prImg.src = photoDataUrl; prPhotoBox.classList.remove('d-none');
     } else {
       dzPreview.removeAttribute('src');
       dzPreviewBox.classList.add('d-none');
       dzEmpty.classList.remove('d-none');
-    }
-    // Kartu & Cetak
-    if (photoDataUrl){
-      pvImg.src = photoDataUrl; pvPhotoBox.classList.remove('d-none');
-      prImg.src = photoDataUrl; prPhotoBox.classList.remove('d-none');
-    } else {
       pvImg.removeAttribute('src'); pvPhotoBox.classList.add('d-none');
       prImg.removeAttribute('src'); prPhotoBox.classList.add('d-none');
     }
@@ -102,7 +105,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 
   // Submit
-  form.addEventListener('submit', (e)=>{
+  form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     if(!form.checkValidity()){ form.classList.add('was-validated'); return; }
 
@@ -115,10 +118,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const kode =sanitizeKode(fd.get('kode_qr'));
     const base =(fd.get('base')||location.origin).toString().trim();
 
-    const token = randomHex(16);
-    const url   = makeURL(base, token);
+    const token = randomHex(16);           // ← token untuk URL
+    const url   = makeURL(base, token);    // /ac/{token}
 
-    // Preview text
+    // Preview
     setText('pvNama', nama||'—');
     setText('pvKode', kode||token);
     setText('pvMerek', merek||'—');
@@ -126,44 +129,65 @@ document.addEventListener('DOMContentLoaded', ()=>{
     setText('pvLokasi', lokasi||'—');
     setText('pvUrl', url);
 
-    // Badge (status fixed: Normal)
     const badge=document.getElementById('pvBadge');
     if (badge){ badge.className='badge text-bg-success'; badge.textContent='Normal'; }
 
-    // QR untuk preview & cetak
     renderQR('qrcode',  url, 256);
     renderQR('printQR', url, 180);
 
-    // Print card texts (pakai URL pendek biar rapi)
     setText('prNama',  nama||'—');
     setText('prLokasi',lokasi||'—');
     setText('prKode',  kode||token);
     setText('prUrl',   shortDisplay(url));
 
-    // Open link button
     if (btnOpen){ btnOpen.href = url; }
 
-    // Alert strip (opsional, biar ada feedback di halaman)
     alertBox.textContent='QR berhasil dibuat. Silakan unduh/cetak label.';
     alertBox.classList.remove('d-none');
 
-    // Simpan state
     sessionStorage.setItem('lastQR', JSON.stringify({
       token,url,nama,merek,model,serial,lokasi,status:'normal',kode,base, photo: photoDataUrl
     }));
 
-    // ================= SweetAlert2 sederhana =================
-    if (window.Swal){
-      Swal.fire({
-        icon: 'success',
-        title: 'QR berhasil dibuat',
-        showConfirmButton: false,
-        timer: 1400,
-        timerProgressBar: true
-      });
-    } else {
-      // fallback native
-      alert('QR berhasil dibuat.');
+    // Persist ke server
+    if (saveUrl){
+      fd.set('token', token); // <— W A J I B
+
+      if (photoDataUrl){
+        const blob = dataUrlToBlob(photoDataUrl);
+        const fname = `${(kode||token).replace(/\W+/g,'_')}.jpg`;
+        fd.set('foto', blob, fname);
+      }
+
+      try{
+        const res = await fetch(saveUrl, {
+          method:'POST',
+          body: fd,
+          headers: {'X-Requested-With':'XMLHttpRequest'}
+        });
+        let js = null;
+        try { js = await res.json(); } catch {}
+        if (!res.ok || !js || !js.ok){
+          const msg = (js && (js.error || JSON.stringify(js.detail||{}))) || `Gagal simpan (${res.status})`;
+          throw new Error(msg);
+        }
+
+        if (btnOpen && js.url){
+          btnOpen.href = js.url;
+          setText('pvUrl', js.url);
+          setText('prUrl', shortDisplay(js.url));
+        }
+
+        if (window.Swal){
+          Swal.fire({icon:'success', title:'Disimpan', text:'Data perangkat & foto tersimpan', timer:1400, showConfirmButton:false});
+        }
+      }catch(err){
+        console.error(err);
+        if (window.Swal){
+          Swal.fire({icon:'error', title:'Gagal simpan', text: err.message || 'Terjadi kesalahan'});
+        } else { alert('Gagal simpan: '+(err.message||'')); }
+        return;
+      }
     }
   });
 
@@ -189,7 +213,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const bb=document.getElementById('pvBadge'); if(bb){ bb.className='badge text-bg-secondary'; bb.textContent='Status'; }
     alertBox.classList.add('d-none');
     if (btnOpen) btnOpen.href='#';
-    applyPhoto(null);
+    // clear foto
+    photoDataUrl = null;
+    document.getElementById('dzPreview')?.removeAttribute('src');
+    document.getElementById('dzPreviewBox')?.classList.add('d-none');
+    document.getElementById('dzEmpty')?.classList.remove('d-none');
+    document.getElementById('pvPhotoBox')?.classList.add('d-none');
+    document.getElementById('prPhotoBox')?.classList.add('d-none');
     sessionStorage.removeItem('lastQR');
   });
 });
