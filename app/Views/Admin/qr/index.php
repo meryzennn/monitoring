@@ -58,14 +58,7 @@
             </div>
           </div>
 
-          <div class="col-6">
-            <label class="form-label">Kode (opsional)</label>
-            <input name="kode_qr" class="form-control" placeholder="KHA-AC-0001">
-          </div>
-
-          <div class="col-12">
-            <div class="form-text">Polanya: <code>/ac/{TOKEN}</code></div>
-          </div>
+          
 
           <div class="col-12">
             <label class="form-label">Base URL publik</label>
